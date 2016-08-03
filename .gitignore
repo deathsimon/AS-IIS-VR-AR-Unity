@@ -82,3 +82,6 @@ $RECYCLE.BIN/
 
 # RF Log
 RoomFusion.log
+
+# DLLs
+Assets/Plugins/dll_windows

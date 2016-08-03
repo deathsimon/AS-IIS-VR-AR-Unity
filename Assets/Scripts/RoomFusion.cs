@@ -6,6 +6,8 @@ using System.Runtime.InteropServices;
 
 public class RoomFusion
 {
+	public int[] REMOTE_BOX_DIM;
+
 	public const int RECT_LT = 0;
 	public const int RECT_RT = 1;
 	public const int RECT_LD = 2;
@@ -64,6 +66,9 @@ public class RoomFusion
 	[DllImport(nameDll,EntryPoint = "rf_getZedFPS")]
 	private static extern float rf_getZedFPS();
 
+	[DllImport(nameDll,EntryPoint = "rf_getRemoteRoomTexturePtr")]
+	private static extern IntPtr rf_getRemoteRoomTexturePtr(int side);
+
 	public static RoomFusion GetInstance()
 	{
 		if (instance == null)
@@ -75,7 +80,14 @@ public class RoomFusion
 	}
 
 	public RoomFusion(){
-
+		REMOTE_BOX_DIM = new int[12]{
+			1416, 339, 
+			803, 193,
+			451, 193, 
+			793, 339, 
+			805, 451, 
+			803, 451
+		};
 	}
 
 	public void Init(){
@@ -191,6 +203,13 @@ public class RoomFusion
 			throw new System.Exception ("RoomFusion not ready. Must call Init first.");
 		}
 		return rf_getZedFPS ();
+	}
+
+	public IntPtr GetRemoteRoomTexturePtr(int side){
+		if (!ready) {
+			throw new System.Exception ("RoomFusion not ready. Must call Init first.");
+		}
+		return rf_getRemoteRoomTexturePtr (side);
 	}
 }
 
