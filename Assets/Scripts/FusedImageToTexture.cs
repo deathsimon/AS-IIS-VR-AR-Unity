@@ -5,6 +5,8 @@ using System.Collections;
 public class FusedImageToTexture : MonoBehaviour {
 
 
+	public bool textureVisible = true;
+
 	private int textureSize;
 	Texture2D texture;
 	// Use this for initialization
@@ -23,6 +25,14 @@ public class FusedImageToTexture : MonoBehaviour {
 	void Update () {
 		if (RoomFusion.GetInstance ().Update ()) {
 			//LoadTexture (); // Deprecated: this is the slow way: copy from cpu memory
+		}
+		if (Input.GetKeyDown (KeyCode.Space)) {
+			textureVisible = !textureVisible;
+		}
+		if (!textureVisible) {
+			GetComponent<Renderer> ().material.SetColor ("_Color", new Color (0, 0, 0, 0));
+		} else {
+			GetComponent<Renderer> ().material.SetColor ("_Color", new Color (1, 1, 1, 1));
 		}
 	}
 		

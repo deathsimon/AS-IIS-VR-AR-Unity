@@ -30,7 +30,7 @@ public class RemoteRoomTexture : MonoBehaviour {
 
 	void LoadTextures(){
 		for (int i = 0; i < 6; i++) {
-			Texture2D texture = (Texture2D)roomSideRenderers [i].material.mainTexture;
+			Texture2D texture = (Texture2D)(roomSideRenderers [i].material.mainTexture);
 			texture.LoadRawTextureData(RoomFusion.GetInstance().GetRemoteRoomTexturePtr(i), roomSideTextureSizes[i]);	
 			texture.Apply();
 		}
