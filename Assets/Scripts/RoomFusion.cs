@@ -69,6 +69,12 @@ public class RoomFusion
 	[DllImport(nameDll,EntryPoint = "rf_getRemoteRoomTexturePtr")]
 	private static extern IntPtr rf_getRemoteRoomTexturePtr(int side);
 
+	[DllImport(nameDll,EntryPoint = "rf_getSocketDelay")]
+	private static extern float rf_getSocketDelay();
+
+	[DllImport(nameDll,EntryPoint = "rf_updateRemoteRoom")]
+	private static extern int rf_updateRemoteRoom();
+
 	public static RoomFusion GetInstance()
 	{
 		if (instance == null)
@@ -210,6 +216,19 @@ public class RoomFusion
 			throw new System.Exception ("RoomFusion not ready. Must call Init first.");
 		}
 		return rf_getRemoteRoomTexturePtr (side);
+	}
+	public float GetSocketDelay(){
+		if (!ready) {
+			throw new System.Exception ("RoomFusion not ready. Must call Init first.");
+		}
+		return rf_getSocketDelay ();
+	}
+
+	public bool UpdateRemoteRoom(){
+		if (!ready) {
+			throw new System.Exception ("RoomFusion not ready. Must call Init first.");
+		}
+		return rf_updateRemoteRoom () == 1;
 	}
 }
 

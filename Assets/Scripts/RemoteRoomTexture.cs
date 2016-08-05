@@ -17,7 +17,9 @@ public class RemoteRoomTexture : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		LoadTextures ();
+		if (RoomFusion.GetInstance ().UpdateRemoteRoom ()) {
+			LoadTextures ();
+		}
 	}
 
 	void InitTextures(){

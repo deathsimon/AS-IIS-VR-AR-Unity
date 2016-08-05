@@ -28,7 +28,7 @@ public class FPSDisplay : MonoBehaviour
 		style.normal.textColor = new Color (1.0f, 1.0f, 1.0f, 1.0f);
 		float msec = deltaTime * 1000.0f;
 		float fps = 1.0f / deltaTime;
-		string text = string.Format("Player: {0:0.0} ms ({1:0.} fps), Zed FPS: {1:0.}", msec, fps, RoomFusion.GetInstance().GetZedPFS());
+		string text = string.Format("Player: {0:0.0} ms ({1:0.} fps), Zed FPS: {2:0.}, Socket: {3:0.0} ms", msec, fps, RoomFusion.GetInstance().GetZedPFS(), RoomFusion.GetInstance().GetSocketDelay() * 1000.0f);
 		GUI.Label(rect, text, style);
 	}
 
