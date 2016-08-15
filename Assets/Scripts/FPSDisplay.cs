@@ -4,6 +4,7 @@ using System.Collections;
 public class FPSDisplay : MonoBehaviour
 {
 	float deltaTime = 0.0f;
+	public GameObject trackingArea;
 
 	void Update()
 	{
@@ -28,7 +29,7 @@ public class FPSDisplay : MonoBehaviour
 		style.normal.textColor = new Color (1.0f, 1.0f, 1.0f, 1.0f);
 		float msec = deltaTime * 1000.0f;
 		float fps = 1.0f / deltaTime;
-		string text = string.Format("Player: {0:0.0} ms ({1:0.} fps), Socket: {2:0.0} ms", msec, fps, RoomFusion.GetInstance().GetSocketDelay() * 1000.0f);
+		string text = string.Format("Player: {0:0.0} ms ({1:0.} fps), Socket: {2:0.0} ms, Threshold: {3:0.0} meter", msec, fps, RoomFusion.GetInstance().GetSocketDelay() * 1000.0f, trackingArea.GetComponent<DepthCorrection>().depthThreshold);
 		GUI.Label(rect, text, style);
 	}
 

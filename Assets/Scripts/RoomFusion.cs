@@ -78,6 +78,13 @@ public class RoomFusion
 	[DllImport(nameDll,EntryPoint = "rf_isD3DInterop")]
 	private static extern int rf_isD3DInterop();
 
+	[DllImport(nameDll,EntryPoint = "rf_getDepth")]
+	private static extern float rf_getDepth(float w, float h);
+
+	[DllImport(nameDll,EntryPoint = "rf_setDepthThreshold")]
+	private static extern float rf_setDepthThreshold (float threshold);
+
+
 	public static RoomFusion GetInstance()
 	{
 		if (instance == null)
@@ -236,6 +243,17 @@ public class RoomFusion
 
 	public bool IsD3DInterop(){
 		return rf_isD3DInterop () == 1;
+	}
+
+	public float GetDepth(float w, float h){
+		if (!ready) {
+			throw new System.Exception ("RoomFusion not ready. Must call Init first.");
+		}
+		return rf_getDepth (w, h);
+	}
+
+	public float SetDepthThreshold(float threshold){
+		return rf_setDepthThreshold (threshold);
 	}
 }
 
