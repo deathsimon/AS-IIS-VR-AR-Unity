@@ -75,6 +75,9 @@ public class RoomFusion
 	[DllImport(nameDll,EntryPoint = "rf_updateRemoteRoom")]
 	private static extern int rf_updateRemoteRoom();
 
+	[DllImport(nameDll,EntryPoint = "rf_isD3DInterop")]
+	private static extern int rf_isD3DInterop();
+
 	public static RoomFusion GetInstance()
 	{
 		if (instance == null)
@@ -229,6 +232,10 @@ public class RoomFusion
 			throw new System.Exception ("RoomFusion not ready. Must call Init first.");
 		}
 		return rf_updateRemoteRoom () == 1;
+	}
+
+	public bool IsD3DInterop(){
+		return rf_isD3DInterop () == 1;
 	}
 }
 

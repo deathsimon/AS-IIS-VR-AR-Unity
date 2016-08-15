@@ -24,7 +24,9 @@ public class FusedImageToTexture : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		if (RoomFusion.GetInstance ().Update ()) {
-			//LoadTexture (); // Deprecated: this is the slow way: copy from cpu memory
+			if (!RoomFusion.GetInstance ().IsD3DInterop ()) {
+				LoadTexture (); // Deprecated: this is the slow way: copy from cpu memory
+			}
 		}
 		if (Input.GetKeyDown (KeyCode.Space)) {
 			textureVisible = !textureVisible;
