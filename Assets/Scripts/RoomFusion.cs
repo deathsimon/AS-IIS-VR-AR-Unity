@@ -13,9 +13,16 @@ public class RoomFusion
 	public const int RECT_LD = 2;
 	public const int RECT_RD = 3;
 
+	public const int EYE_LEFT = 0;
+	public const int EYE_RIGHT = 1;
+
 	public bool trackingValid;
 
 	public const float UNIT_CONVERT_RATE = 28.0f;
+
+	int eye_ready = 0x0;
+
+	static bool last_update = false;
 
 	// tracking
 	unsafe private float* path;
@@ -37,7 +44,7 @@ public class RoomFusion
 	private static extern int rf_update();
 
 	[DllImport(nameDll,EntryPoint = "rf_getCulledImagePtr")]
-	private static extern IntPtr rf_getCulledImagePtr();
+	private static extern IntPtr rf_getCulledImagePtr(int eye);
 
 	[DllImport(nameDll,EntryPoint = "rf_getImageSize")]
 	private static extern int rf_getImageSize();
@@ -61,7 +68,10 @@ public class RoomFusion
 	unsafe private static extern float* rf_getPositionPtr();
 
 	[DllImport(nameDll,EntryPoint = "rf_setD3D11TexturePtr")]
-	private static extern void rf_setD3D11TexturePtr(IntPtr ptr);
+	private static extern void rf_setD3D11TexturePtr(int eye, IntPtr ptr);
+
+	[DllImport(nameDll,EntryPoint = "rf_initD3DTexture")]
+	private static extern void rf_initD3DTexture();
 
 	[DllImport(nameDll,EntryPoint = "rf_getZedFPS")]
 	private static extern float rf_getZedFPS();
@@ -84,6 +94,8 @@ public class RoomFusion
 	[DllImport(nameDll,EntryPoint = "rf_setDepthThreshold")]
 	private static extern float rf_setDepthThreshold (float threshold);
 
+	[DllImport(nameDll,EntryPoint = "rf_resetTracking")]
+	private static extern void rf_resetTracking();
 
 	public static RoomFusion GetInstance()
 	{
@@ -124,18 +136,21 @@ public class RoomFusion
 		}
 	}
 
-	public bool Update(){
+	public bool Update(int eye){
 		if (!ready) {
 			throw new System.Exception ("RoomFusion not ready. Must call Init first.");
 		}
-		return rf_update () == 1;
+		if (eye == EYE_LEFT) {
+			last_update = rf_update () == 1;
+		}
+		return last_update;
 	}
 
-	public IntPtr GetCulledImagePtr(){
+	public IntPtr GetCulledImagePtr(int eye){
 		if (!ready) {
 			throw new System.Exception ("RoomFusion not ready. Must call Init first.");
 		}
-		return rf_getCulledImagePtr ();
+		return rf_getCulledImagePtr (eye);
 	}
 
 	public int GetImageSize(){
@@ -210,8 +225,12 @@ public class RoomFusion
 		}
 	}
 
-	public void SetD3D11TexturePtr(IntPtr ptr){
-		rf_setD3D11TexturePtr(ptr);
+	public void SetD3D11TexturePtr(int eye, IntPtr ptr){
+		rf_setD3D11TexturePtr(eye, ptr);
+		eye_ready |= (0x1 << eye);
+		if (eye_ready == 0x3) {
+			InitD3DTexture ();	
+		}
 	}
 
 	public float GetZedPFS(){
@@ -254,6 +273,21 @@ public class RoomFusion
 
 	public float SetDepthThreshold(float threshold){
 		return rf_setDepthThreshold (threshold);
+	}
+
+
+	public void InitD3DTexture(){		
+		if (!ready) {
+			throw new System.Exception ("RoomFusion not ready. Must call Init first.");
+		}
+		rf_initD3DTexture();
+	}
+
+	public void ResetTracking(){	
+		if (!ready) {
+			throw new System.Exception ("RoomFusion not ready. Must call Init first.");
+		}
+		rf_resetTracking ();
 	}
 }
 
