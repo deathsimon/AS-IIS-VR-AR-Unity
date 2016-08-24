@@ -130,11 +130,9 @@ public class OVRCameraRig : MonoBehaviour
 
 	private void UpdateAnchors()
 	{
-		
 		bool monoscopic = OVRManager.instance.monoscopic;
 
 		OVRPose tracker = OVRManager.tracker.GetPose();
-		Debug.Log (tracker.orientation.eulerAngles);
 
 		trackerAnchor.localRotation = tracker.orientation;
 		centerEyeAnchor.localRotation = VR.InputTracking.GetLocalRotation(VR.VRNode.CenterEye);

@@ -19,10 +19,6 @@ limitations under the License.
 
 ************************************************************************************/
 
-#if !UNITY_5
-#define OVR_LEGACY
-#endif
-
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -215,14 +211,14 @@ public static class OVRInput
 	/// Identifies a controller which can be used to query the virtual or raw input state.
 	public enum Controller
 	{
-		None                      = 0,                          ///< Null controller.
-		LTouch                    = 0x00000001,                 ///< Left Oculus Touch controller. Virtual input mapping differs from the combined L/R Touch mapping.
-		RTouch                    = 0x00000002,                 ///< Right Oculus Touch controller. Virtual input mapping differs from the combined L/R Touch mapping.
-		Remote                    = 0x00000004,                 ///< Oculus Remote controller.
-		Touch                     = LTouch | RTouch,            ///< Combined Left/Right pair of Oculus Touch controllers.
-		Gamepad                   = 0x00000008,                 ///< Xbox 360 or Xbox One gamepad on PC. Generic gamepad on Android.
-		Active                    = unchecked((int)0x80000000), ///< Default controller. Represents the controller that most recently registered a button press from the user.
-		All                       = ~None,                      ///< Represents the logical OR of all controllers.
+		None                      = OVRPlugin.Controller.None,    ///< Null controller.
+		LTouch                    = OVRPlugin.Controller.LTouch,  ///< Left Oculus Touch controller. Virtual input mapping differs from the combined L/R Touch mapping.
+		RTouch                    = OVRPlugin.Controller.RTouch,  ///< Right Oculus Touch controller. Virtual input mapping differs from the combined L/R Touch mapping.
+		Touch                     = OVRPlugin.Controller.Touch,   ///< Combined Left/Right pair of Oculus Touch controllers.
+		Remote                    = OVRPlugin.Controller.Remote,  ///< Oculus Remote controller.
+		Gamepad                   = OVRPlugin.Controller.Gamepad, ///< Xbox 360 or Xbox One gamepad on PC. Generic gamepad on Android.
+		Active                    = OVRPlugin.Controller.Active,  ///< Default controller. Represents the controller that most recently registered a button press from the user.
+		All                       = OVRPlugin.Controller.All,     ///< Represents the logical OR of all controllers.
 	}
 
 	private static readonly float AXIS_AS_BUTTON_THRESHOLD = 0.5f;
@@ -262,10 +258,14 @@ public static class OVRInput
 			OVRControllerBase controller = controllers[i];
 
 			connectedControllerTypes |= controller.Update();
-			if (Get(RawButton.Any, controller.controllerType)
-				|| Get(RawTouch.Any, controller.controllerType))
+
+			if ((connectedControllerTypes & controller.controllerType) != 0)
 			{
-				activeControllerType = controller.controllerType;
+				if (Get(RawButton.Any, controller.controllerType)
+					|| Get(RawTouch.Any, controller.controllerType))
+				{
+					activeControllerType = controller.controllerType;
+				}
 			}
 		}
 
@@ -1763,32 +1763,9 @@ public static class OVRInput
 			OVR_GamepadController_Destroy();
 		}
 
-		private bool ShouldUpdate()
-		{
-			// XInput is notoriously slow to update if no Xbox controllers are present. (up to ~0.5 ms)
-			// Use Unity's joystick detection as a quick way to short-circuit the need to query XInput.
-			if ((Time.time - joystickCheckTime) > joystickCheckInterval)
-			{
-				joystickCheckTime = Time.time;
-				joystickDetected = false;
-				var joystickNames = UnityEngine.Input.GetJoystickNames();
-
-				for (int i = 0; i < joystickNames.Length; i++)
-				{
-					if (joystickNames[i] != String.Empty)
-					{
-						joystickDetected = true;
-						break;
-					}
-				}
-			}
-
-			return joystickDetected;
-		}
-
 		public override Controller Update()
 		{
-			if (!initialized || !ShouldUpdate())
+			if (!initialized)
 			{
 				return Controller.None;
 			}

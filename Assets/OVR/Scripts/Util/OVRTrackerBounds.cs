@@ -89,8 +89,8 @@ public class OVRTrackerBounds : MonoBehaviour
         float farZ = frustum.farZ;
         float hFOV = Mathf.Deg2Rad * frustum.fov.x * 0.5f;
         float vFOV = Mathf.Deg2Rad * frustum.fov.y * 0.5f;
-        float sx = Mathf.Sin(hFOV);
-        float sy = Mathf.Sin(vFOV);
+        float sx = Mathf.Tan(hFOV);
+        float sy = Mathf.Tan(vFOV);
 
         plane[0] = new Plane(Vector3.zero, farZ * new Vector3(sx, sy, 1f), farZ * new Vector3(sx, -sy, 1f));    // right
         plane[1] = new Plane(Vector3.zero, farZ * new Vector3(-sx, -sy, 1f), farZ * new Vector3(-sx, sy, 1f));  // left

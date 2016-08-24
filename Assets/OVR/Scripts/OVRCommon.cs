@@ -185,6 +185,8 @@ public struct OVRPose
 	{
 		var ret = this;
 		ret.position.z = -ret.position.z;
+		ret.orientation.z = -ret.orientation.z;
+		ret.orientation.w = -ret.orientation.w;
 		return ret;
 	}
 

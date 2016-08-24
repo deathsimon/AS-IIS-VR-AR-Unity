@@ -97,14 +97,15 @@ public class OVRTracker
 	public int count
 	{
 		get {
+			int count = 0;
+
 			for (int i = 0; i < (int)OVRPlugin.Tracker.Count; ++i)
 			{
-				var frust = OVRPlugin.GetTrackerFrustum((OVRPlugin.Tracker)i);
-				if (frust.fovX == 0f && frust.fovY == 0f)
-					return i;
+				if (GetPresent(i))
+					count++;
 			}
 
-			return (int)OVRPlugin.Tracker.Count;
+			return count;
 		}
 	}
 
@@ -127,12 +128,58 @@ public class OVRTracker
 		if (!OVRManager.isHmdPresent)
 			return OVRPose.identity;
 
-		var p = OVRPlugin.GetTrackerPose((OVRPlugin.Tracker)tracker).ToOVRPose();
+		OVRPose p;
+		switch (tracker)
+		{
+			case 0:
+				p = OVRPlugin.GetNodePose(OVRPlugin.Node.TrackerZero).ToOVRPose();
+				break;
+			case 1:
+				p = OVRPlugin.GetNodePose(OVRPlugin.Node.TrackerOne).ToOVRPose();
+				break;
+			default:
+				return OVRPose.identity;
+		}
 		
 		return new OVRPose()
 		{
 			position = p.position,
 			orientation = p.orientation * Quaternion.Euler(0, 180, 0)
 		};
+	}
+
+	/// <summary>
+	/// If true, the pose of the sensor is valid and is ready to be queried.
+	/// </summary>
+	public bool GetPoseValid(int tracker = 0)
+	{
+		if (!OVRManager.isHmdPresent)
+			return false;
+
+		switch (tracker)
+		{
+			case 0:
+				return OVRPlugin.GetNodePositionTracked(OVRPlugin.Node.TrackerZero);
+			case 1:
+				return OVRPlugin.GetNodePositionTracked(OVRPlugin.Node.TrackerOne);
+			default:
+				return false;
+		}
+	}
+
+	public bool GetPresent(int tracker = 0)
+	{
+		if (!OVRManager.isHmdPresent)
+			return false;
+
+		switch (tracker)
+		{
+			case 0:
+				return OVRPlugin.GetNodePresent(OVRPlugin.Node.TrackerZero);
+			case 1:
+				return OVRPlugin.GetNodePresent(OVRPlugin.Node.TrackerOne);
+			default:
+				return false;
+		}
 	}
 }

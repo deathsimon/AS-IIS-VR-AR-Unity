@@ -337,8 +337,6 @@ public class OVRPlayerController : MonoBehaviour
 	/// </summary>
 	public void UpdateTransform(OVRCameraRig rig)
 	{
-		/*
-		return;
 		Transform root = CameraRig.trackingSpace;
 		Transform centerEye = CameraRig.centerEyeAnchor;
 
@@ -352,7 +350,6 @@ public class OVRPlayerController : MonoBehaviour
 			root.position = prevPos;
 			root.rotation = prevRot;
 		}
-		*/
 	}
 
 	/// <summary>
