@@ -20,7 +20,7 @@
 - 在執行Unity程式或Unity編輯器前，請先編譯C extension
   - 編譯後產生的`RoomFusionDLL.dll`請放在`Assets\Plugins\dll_windows`底下
   - 切勿在開著Unity編輯器或者遊戲時編譯C extension，會導致.dll檔案無法更新
-  - 若不幸更新失敗，可以在關掉程式後手動複製，或者任意修改.dll原始碼後重新編譯
+  - 若不幸更新失敗，可以在關掉程式後手動複製，或者任意修改.dll原始碼後重新編譯(會觸發自動複製)
 - 直接進入play mode，或者build之後執行輸出的exe程式
 - 注意，本程式在編輯器中有機率Crash，建議先build之後再來測試(雖然還是有機率Crash)
 
