@@ -18,6 +18,7 @@ public class RoomFusion
 
 	public bool trackingValid;
 
+	// Unity世界長度單位與現實世界單位轉換率
 	public const float UNIT_CONVERT_RATE = 28.0f;
 
 	int eye_ready = 0x0;
@@ -107,6 +108,7 @@ public class RoomFusion
 		return instance;
 	}
 
+	// 遠端房間六面影像的解析度
 	public RoomFusion(){
 		REMOTE_BOX_DIM = new int[12]{
 			1024, 259, 
@@ -193,6 +195,7 @@ public class RoomFusion
 		return rf_getPositionPtr ();
 	}
 
+	// 位置計算，將ZED抓到的座標系轉為Unity使用的
 	unsafe public bool UpdateTracking(){
 		path = GetPositionPtr ();
 		if (path != null) {

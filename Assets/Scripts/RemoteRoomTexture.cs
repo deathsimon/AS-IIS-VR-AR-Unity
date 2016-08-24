@@ -3,6 +3,7 @@ using System.Collections;
 
 public class RemoteRoomTexture : MonoBehaviour {
 
+	// 六個面的牆面物件
 	public Renderer[] roomSideRenderers;
 	int[] roomSideTextureSizes;
 
@@ -22,6 +23,7 @@ public class RemoteRoomTexture : MonoBehaviour {
 		}
 	}
 
+	// 初始化texture，建立六面texture
 	void InitTextures(){
 		for (int i = 0; i < 6; i++) {
 			Texture2D texture = new Texture2D(RoomFusion.GetInstance().REMOTE_BOX_DIM[i * 2 + 0], RoomFusion.GetInstance().REMOTE_BOX_DIM[i * 2 + 1], TextureFormat.BGRA32, false);
@@ -29,7 +31,7 @@ public class RemoteRoomTexture : MonoBehaviour {
 			roomSideTextureSizes[i] = RoomFusion.GetInstance().REMOTE_BOX_DIM[i * 2 + 0] * RoomFusion.GetInstance().REMOTE_BOX_DIM[i * 2 + 1] * 4;
 		}
 	}
-
+	// 從C extension的影像資料來更新六面圖
 	void LoadTextures(){
 		for (int i = 0; i < 6; i++) {
 			Texture2D texture = (Texture2D)(roomSideRenderers [i].material.mainTexture);

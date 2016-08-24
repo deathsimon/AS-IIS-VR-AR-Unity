@@ -28,9 +28,12 @@ public class DepthCorrection : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		if (Input.GetKeyDown (KeyCode.B)) {
+			// 執行牆壁定位修正
 			PerformCorrection ();
 		}
 		// update movement correction
+		// 根據牆壁方向與觀察者在世界座標的位移，找出投影在牆壁方向的分量
+		// 藉此決定要如何更動threshold
 		Vector3 displacement = transform.position - initPosition;
 		Vector3 projection = Vector3.Project (displacement, wallDirection);
 		float distance = projection.magnitude / RoomFusion.UNIT_CONVERT_RATE;
@@ -40,10 +43,11 @@ public class DepthCorrection : MonoBehaviour {
 			depthThreshold = initDepthThreshold + distance;	
 		}
 
-		// set RF depth
+		// 設定深度threshold，
 		RoomFusion.GetInstance ().SetDepthThreshold (depthThreshold);
 	}
-		
+	// 牆壁定位修正
+	// 設定牆壁方向
 	void PerformCorrection(){
 		Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 		RaycastHit hit;

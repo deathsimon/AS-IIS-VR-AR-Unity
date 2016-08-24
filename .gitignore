@@ -84,4 +84,5 @@ $RECYCLE.BIN/
 RoomFusion.log
 
 # DLLs
-Assets/Plugins/dll_windows
+Assets/Plugins/dll_windows/*.dll
+Assets/Plugins/dll_windows/*.meta

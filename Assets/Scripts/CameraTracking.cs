@@ -13,7 +13,8 @@ public class CameraTracking : MonoBehaviour {
 	
 	// Update is called once per frame
 	void FixedUpdate () {
-		
+
+		// 利用ZED的position tracking來更新此物件的位置
 		if (RoomFusion.GetInstance ().UpdateTracking ()) {
 			transform.localPosition = RoomFusion.GetInstance ().translation;
 			//transform.rotation = Quaternion.Inverse (UnityEngine.VR.InputTracking.GetLocalRotation (UnityEngine.VR.VRNode.CenterEye)) * RoomFusion.GetInstance ().rotation;
@@ -21,6 +22,7 @@ public class CameraTracking : MonoBehaviour {
 	}
 
 	void Update () {
+		// 重新定位偵測
 		if (Input.GetKeyDown (KeyCode.N)) {
 			RoomFusion.GetInstance ().ResetTracking ();
 			Debug.Log ("Recentering");
